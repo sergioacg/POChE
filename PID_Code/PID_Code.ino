@@ -9,7 +9,7 @@
  * ****************************************************
  */
 // This simulates a 20W heater block
-#include <TimerOne.h>
+//#include <TimerOne.h>
 
 bool automatic = true;  // true = closed-loop, false = open-loop
 
@@ -100,11 +100,11 @@ void initializePID() {
 void setup() {
   Serial.begin(9600);
   initializePID();  // Initialize PID parameters
-
+  /*
   if (automatic) {
     Timer1.initialize(Ts * 1000000);  // Set TIMER to 8 seconds
     Timer1.attachInterrupt(SampleTime);  // Set up interrupt to call SampleTime
-  }
+  }*/
 }
 
 void loop() {
@@ -124,16 +124,15 @@ void loop() {
   if (millis() - last >= interval) {
     last += interval;
     // Send data over serial port, if needed
-    Serial.print(setpoint);
-    Serial.print("\t");
-    Serial.print(Output);
-    Serial.print("\t");
-    Serial.print(temperature);
-    Serial.print("\t");
-    Serial.print(0);
-    Serial.print("\t");
-    Serial.println(255);
-    
+    Serial.println(setpoint);
+    Serial.print(",");
+    Serial.println(Output);
+    Serial.print(",");
+    Serial.println(temperature);
+    Serial.print(",");
+    if (automatic) {
+      SampleTime();  // Control Law
+    }
   }
 }
 
